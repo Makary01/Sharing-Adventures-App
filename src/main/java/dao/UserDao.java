@@ -4,7 +4,6 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import model.User;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.DbUtil;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,12 +11,16 @@ import java.sql.SQLException;
 
 public class UserDao {
     //SQL QUERIES
-    private static final String CREATE_USER_QUERY = "INSERT INTO users(username,email,password,city,country) VALUES (?,?,?,?,?);";
+    private static final String USER_PARAMETERS = "(username,email,password,city,country)";
+
+    private static final String CREATE_USER_QUERY = "INSERT INTO users" + USER_PARAMETERS +" VALUES (?,?,?,?,?);";
     private static final String READ_USER_QUERY = "SELECT * FROM users WHERE id = ? ;";
+    private static final String UPDATE_USER_QUERY = "UPDATE users SET" + USER_PARAMETERS +" VALUES (?,?,?,?,?);";
+    private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id = ?;";
     private static final String VERIFY_USER_QUERY  = "SELECT * FROM users WHERE username = ?;";
 
 
-    //Create User in database, returns user with id if created, null if not
+    //Create User in database, returns user with id if created, or null if not
     public User createUser(User user){
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement insertUserPrepStm = connection.prepareStatement
@@ -42,7 +45,7 @@ public class UserDao {
         return null;
     }
 
-    //Reads User by user's id, returns user if found, null if not
+    //Reads User from database by user's id, returns user if found, or null if not
     public User read(Integer userId){
         User userToReturn = null;
         try (Connection connection = DbUtil.getConnection();
@@ -56,7 +59,34 @@ public class UserDao {
         return userToReturn;
     }
 
-    //Verifies the user, returns user if data is correct, null when incorrect
+    //Updates User to database, returns same user if updated successfully, or null if data is incorrect
+    public User update(User user){
+        User userToReturn = null;
+        try(Connection connection = DbUtil.getConnection()) {
+            PreparedStatement updateUserPrepStm = connection.prepareStatement(UPDATE_USER_QUERY);
+            setPrepStmParameters(updateUserPrepStm,user);
+            updateUserPrepStm.executeUpdate();
+            userToReturn = user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userToReturn;
+    }
+
+    //Deletes User from database, returns true if deleted successfully, or false otherwise
+    public boolean delete(Integer userId){
+        try(Connection connection = DbUtil.getConnection()) {
+            PreparedStatement deleteUserPrepStm = connection.prepareStatement(DELETE_USER_QUERY);
+            deleteUserPrepStm.setInt(1,userId);
+            deleteUserPrepStm.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //Verifies the user with database, returns user if data is correct, or null when incorrect
     public User verifyUser(String username, String password){
         try(Connection conn = DbUtil.getConnection();
             PreparedStatement verifyUserPrepStm = conn.prepareStatement(VERIFY_USER_QUERY)){
@@ -75,6 +105,7 @@ public class UserDao {
         return null;
     }
 
+
     private void setPrepStmParameters(PreparedStatement prepStm, User user) throws SQLException {
         prepStm.setString(1,user.getUsername());
         prepStm.setString(2,user.getEmail());
@@ -82,6 +113,7 @@ public class UserDao {
         prepStm.setString(4,user.getCity());
         prepStm.setString(5,user.getCountry());
     }
+
     private User generateUserFromResultSet(ResultSet resultSet) throws SQLException {
         User userToReturn = new User(
                 resultSet.getInt("id"),
@@ -93,8 +125,4 @@ public class UserDao {
         );
         return userToReturn;
     }
-
-
-
-
 }
