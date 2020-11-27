@@ -21,7 +21,7 @@ public class UserDao {
 
 
     //Create User in database, returns user with id if created, or null if not
-    public User createUser(User user){
+    public User create(User user){
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement insertUserPrepStm = connection.prepareStatement
                      (CREATE_USER_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)){
@@ -87,7 +87,7 @@ public class UserDao {
     }
 
     //Verifies the user with database, returns user if data is correct, or null when incorrect
-    public User verifyUser(String username, String password){
+    public User verify(String username, String password){
         try(Connection conn = DbUtil.getConnection();
             PreparedStatement verifyUserPrepStm = conn.prepareStatement(VERIFY_USER_QUERY)){
             verifyUserPrepStm.setString(1, username);
@@ -115,14 +115,18 @@ public class UserDao {
     }
 
     private User generateUserFromResultSet(ResultSet resultSet) throws SQLException {
-        User userToReturn = new User(
-                resultSet.getInt("id"),
-                resultSet.getString("username"),
-                resultSet.getString("email"),
-                resultSet.getString("password"),
-                resultSet.getString("city"),
-                resultSet.getString("country")
-        );
-        return userToReturn;
+        if(resultSet.next()) {
+            User userToReturn = new User(
+                    resultSet.getInt("id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("email"),
+                    resultSet.getString("password"),
+                    resultSet.getString("city"),
+                    resultSet.getString("country")
+            );
+            return userToReturn;
+        }else {
+            return null;
+        }
     }
 }

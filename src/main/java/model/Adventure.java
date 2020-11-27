@@ -1,24 +1,24 @@
 package model;
 
-import java.util.*;
+import java.time.LocalDate;
 
 public class Adventure {
 
     private Integer id;
-    private Integer user_id;
+    private Integer userId;
     private String type;
     private String title;
     private String content;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     public Adventure() {
     }
 
     //constructor for Dao class
-    public Adventure(Integer id, Integer user_id, String type, String title, String content, Date startDate, Date endDate) {
+    public Adventure(Integer id, Integer user_id, String type, String title, String content, LocalDate startDate, LocalDate endDate) {
         this.id = id;
-        this.user_id = user_id;
+        this.userId = user_id;
         this.type = type;
         this.title = title;
         this.content = content;
@@ -30,12 +30,12 @@ public class Adventure {
         return id;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getType() {
@@ -63,19 +63,23 @@ public class Adventure {
         this.content = content;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
