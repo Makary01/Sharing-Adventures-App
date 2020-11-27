@@ -1,5 +1,7 @@
 package model;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class User {
     private Integer id;
     private String username;
@@ -29,8 +31,9 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = hashPassword(password);
     }
+
 
     public void setCity(String city) {
         this.city = city;
@@ -62,5 +65,12 @@ public class User {
 
     public String getCountry() {
         return country;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    private String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 }
