@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class AdventureDao {
 
@@ -17,6 +19,7 @@ public class AdventureDao {
 
     private static final String CREATE_ADVENTURE_QUERY = "INSERT INTO adventures" + ADVENTURE_PARAMETERS +" VALUES (?,?,?,?,?,?);";
     private static final String READ_ADVENTURE_QUERY = "SELECT * FROM adventures WHERE id = ? ;";
+    private static final String READ_USERS_ADVENTURES_QUERY = "SELECT * FORM adventures WHERE user_id = ?;";
     private static final String UPDATE_ADVENTURE_QUERY = "UPDATE adventures SET" + ADVENTURE_PARAMETERS +" VALUES (?,?,?,?,?,?) WHERE id = ?;";
     private static final String DELETE_ADVENTURE_QUERY = "DELETE FROM adventures WHERE id = ?;";
 
@@ -54,11 +57,30 @@ public class AdventureDao {
             readAdvPrepStm.setInt(1,adventureId);
             readAdvPrepStm.executeUpdate();
             ResultSet resultSet = readAdvPrepStm.executeQuery();
-            advToReturn = generateAdvFromResultSet(resultSet);
+            if(resultSet.next()) advToReturn = generateAdvFromResultSet(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return advToReturn;
+    }
+
+    //Reads adventure from database by user's id, returns arraylist of adventures if found, or null if not
+    public ArrayList<Adventure> readByUserId(Integer userId){
+        ArrayList<Adventure> adventuresToReturn = null;
+        try(Connection connection = DbUtil.getConnection()){
+            PreparedStatement readAdvsPrepStm = connection.prepareStatement(READ_USERS_ADVENTURES_QUERY);
+            readAdvsPrepStm.setInt(1,userId);
+            readAdvsPrepStm.executeUpdate();
+            ResultSet resultSet = readAdvsPrepStm.executeQuery();
+            while (resultSet.next()){
+               Adventure advToAdd = generateAdvFromResultSet(resultSet);
+               adventuresToReturn.add(advToAdd);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return adventuresToReturn;
     }
 
     //Updates adventure in database, returns updated adventure if updated successfully, null if not
@@ -91,7 +113,6 @@ public class AdventureDao {
 
 
     private Adventure generateAdvFromResultSet(ResultSet resultSet) throws SQLException {
-        if(resultSet.next()){
             Adventure advToReturn = new Adventure(
                     resultSet.getInt("id"),
                     resultSet.getInt("user_id"),
@@ -101,8 +122,6 @@ public class AdventureDao {
                     DateUtil.stringToDate(resultSet.getString("start_date")),
                     DateUtil.stringToDate(resultSet.getString("end_date")));
             return advToReturn;
-        }
-        return null;
     }
 
     private void setPrepStmParameters(PreparedStatement prepStm, Adventure adventure) throws SQLException {

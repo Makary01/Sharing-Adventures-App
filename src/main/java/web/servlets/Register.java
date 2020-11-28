@@ -18,16 +18,22 @@ public class Register extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String password2 = request.getParameter("password2");
+        String city = request.getParameter("city");
+        String country = request.getParameter("country");
 
         if (RegexUtil.validateUserName(username)
                 && RegexUtil.validatePassword(password)
                 && RegexUtil.validateEmail(email)
+                && RegexUtil.validateCity(city)
+                && RegexUtil.validateCountry(country)
                 && password.equals(password2)) {
 
             User userToCreate = new User();
             userToCreate.setPassword(password);
             userToCreate.setUsername(username);
             userToCreate.setEmail(email);
+            userToCreate.setCity(city);
+            userToCreate.setCountry(country);
 
             UserDao userDao = new UserDao();
             User createdUser = userDao.create(userToCreate);

@@ -32,6 +32,12 @@
 
     <input type="email" name="email" placeholder="email" required>
 
+    <input type="text" name="city" placeholder="city" required
+           pattern="[a-zA-Z]{2,16}" title="2 to 16 letters">
+
+    <input type="text" name="country" placeholder="country" required
+           pattern="[a-zA-Z]{2,16}" title="2 to 16 letters">
+
     <input type="password" name="password" placeholder="password"
            required pattern=".{5,20}" title="5 to 20 chars" >
 

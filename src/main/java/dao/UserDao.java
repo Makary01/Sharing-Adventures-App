@@ -4,6 +4,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import model.User;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.DbUtil;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -52,7 +53,9 @@ public class UserDao {
              PreparedStatement readUserPrepStm = connection.prepareStatement(READ_USER_QUERY)) {
             readUserPrepStm.setInt(1, userId);
             ResultSet resultSet = readUserPrepStm.executeQuery();
-            userToReturn = generateUserFromResultSet(resultSet);
+            if(resultSet.next()){
+                userToReturn = generateUserFromResultSet(resultSet);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,10 +95,11 @@ public class UserDao {
              PreparedStatement verifyUserPrepStm = conn.prepareStatement(VERIFY_USER_QUERY)) {
             verifyUserPrepStm.setString(1, username);
             ResultSet resultSet = verifyUserPrepStm.executeQuery();
-
-            User userToReturn = generateUserFromResultSet(resultSet);
-            if (BCrypt.checkpw(password, userToReturn.getPassword())) {
-                return userToReturn;
+            if (resultSet.next()) {
+                User userToReturn = generateUserFromResultSet(resultSet);
+                if (BCrypt.checkpw(password, userToReturn.getPassword())) {
+                    return userToReturn;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -113,18 +117,15 @@ public class UserDao {
     }
 
     private User generateUserFromResultSet(ResultSet resultSet) throws SQLException {
-        if (resultSet.next()) {
-            User userToReturn = new User(
-                    resultSet.getInt("id"),
-                    resultSet.getString("username"),
-                    resultSet.getString("email"),
-                    resultSet.getString("password"),
-                    resultSet.getString("city"),
-                    resultSet.getString("country")
-            );
-            return userToReturn;
-        } else {
-            return null;
-        }
+        User userToReturn = new User(
+                resultSet.getInt("id"),
+                resultSet.getString("username"),
+                resultSet.getString("email"),
+                resultSet.getString("password"),
+                resultSet.getString("city"),
+                resultSet.getString("country")
+        );
+        return userToReturn;
     }
 }
+
