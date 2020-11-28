@@ -20,7 +20,7 @@ public class LogIn extends HttpServlet {
         User verifiedUser = userDao.verify(username,password);
         if(verifiedUser!=null){
             request.getSession().setAttribute("userId",verifiedUser.getId());
-            response.sendRedirect("/user/panel");
+            response.sendRedirect("/app/home");
         }else {
             response.sendRedirect("/home");
         }

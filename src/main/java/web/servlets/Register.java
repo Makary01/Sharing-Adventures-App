@@ -33,7 +33,7 @@ public class Register extends HttpServlet {
             User createdUser = userDao.create(userToCreate);
             if(createdUser!=null){
                 request.getSession().setAttribute("userId",createdUser.getId());
-                response.sendRedirect("/user/panel");
+                response.sendRedirect("/app/home");
             }else {
                 response.sendRedirect("/home");
             }
