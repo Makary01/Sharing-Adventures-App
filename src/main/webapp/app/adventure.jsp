@@ -6,18 +6,29 @@
 </head>
 <body>
 <c:choose>
-
-    <c:when test="${adventure.id != userId}">
-        czyjaś przygoda
+    <c:when test="${adventure.userId != userId}">
+        Start date:${adventure.startDate}<br>
+        End date:${adventure.endDate}<br>
+        Type:${adventure.type}<br>
+        <h1>${adventure.title}</h1><br>
+        <h4>${adventure.content}</h4><br>
     </c:when>
 
-
     <c:otherwise>
-        twoja przygoda
+        <form id="editForm" action="/app/adventure" method="post">
+            <h1>edit adventure</h1><br>
+            Title:<input type="text" name="title" value="${adventure.title}" required
+                   pattern=".{4,128}" title="4 to 128 letters and numbers"><br>
+            Content:<textarea name="content" required>${adventure.content}</textarea><br>
+            Start date: <input type="date" name="startDate" required value="${adventure.startDate}"><br>
+            End date: <input type="date" name="endDate" required value="${adventure.endDate}"><br>
+            Type: <select name="type" required ><option>${adventure.type}</option>
+            <c:forEach items="${types}" var="type">
+            <option>${type}</option>
+            </c:forEach></select><br>
+            <input type="submit" value="save changes">
+        </form>
     </c:otherwise>
-
 </c:choose>
-
-
 </body>
 </html>

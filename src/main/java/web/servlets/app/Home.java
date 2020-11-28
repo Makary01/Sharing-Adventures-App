@@ -2,6 +2,7 @@ package web.servlets.app;
 
 import dao.AdventureDao;
 import model.Adventure;
+import utils.AdventureTypesUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,9 +36,12 @@ public class Home extends HttpServlet {
             adventures = adventureDao.readFromTo((pageInt-1)*20,pageInt*20);
         }
         if(adventures.size() == 0){
+            pageInt=1;
             adventures = adventureDao.readFromTo(0,20);
         }
         request.setAttribute("adventures", adventures);
+        request.setAttribute("page",pageInt);
+        request.setAttribute("types", AdventureTypesUtil.getTypes());
         getServletContext().getRequestDispatcher("/app/home.jsp").forward(request,response);
     }
 }

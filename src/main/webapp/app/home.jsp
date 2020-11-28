@@ -11,7 +11,8 @@ Najnowsze przygody:
 <ul>
 <c:forEach items="${adventures}" var="adventure">
     <li><a href="/app/adventure?id=${adventure.id}">${adventure.title}</a></li>
-</c:forEach>
+</c:forEach><br>
+    <a href="/app/home?page=${page-1}">prev page</a>|<a href="/app/home?page=${page+1}">next page</a>
 </ul>
 </body>
 </html>
