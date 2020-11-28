@@ -74,7 +74,7 @@ public class UserDao {
     }
 
     //Deletes User from database, returns true if deleted successfully, or false otherwise
-    public boolean delete(Integer userId){
+    public Boolean delete(Integer userId){
         try(Connection connection = DbUtil.getConnection()) {
             PreparedStatement deleteUserPrepStm = connection.prepareStatement(DELETE_USER_QUERY);
             deleteUserPrepStm.setInt(1,userId);

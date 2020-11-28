@@ -13,11 +13,11 @@ import java.sql.SQLException;
 public class AdventureDao {
 
     //SQL QUERIES
-    private static final String ADVENTURE_PARAMETERS = "(id,user_id,type,title,content,start_date,end_date)";
+    private static final String ADVENTURE_PARAMETERS = "(user_id,type,title,content,start_date,end_date)";
 
-    private static final String CREATE_ADVENTURE_QUERY = "INSERT INTO adventures" + ADVENTURE_PARAMETERS +" VALUES (?,?,?,?,?);";
+    private static final String CREATE_ADVENTURE_QUERY = "INSERT INTO adventures" + ADVENTURE_PARAMETERS +" VALUES (?,?,?,?,?,?);";
     private static final String READ_ADVENTURE_QUERY = "SELECT * FROM adventures WHERE id = ? ;";
-    private static final String UPDATE_ADVENTURE_QUERY = "UPDATE adventures SET" + ADVENTURE_PARAMETERS +" VALUES (?,?,?,?,?);";
+    private static final String UPDATE_ADVENTURE_QUERY = "UPDATE adventures SET" + ADVENTURE_PARAMETERS +" VALUES (?,?,?,?,?,?) WHERE id = ?;";
     private static final String DELETE_ADVENTURE_QUERY = "DELETE FROM adventures WHERE id = ?;";
 
 
@@ -61,6 +61,33 @@ public class AdventureDao {
         return advToReturn;
     }
 
+    //Updates adventure in database, returns updated adventure if updated successfully, null if not
+    public Adventure update(Adventure adventure){
+        try (Connection connection = DbUtil.getConnection();
+             PreparedStatement updateAdvPrepStm = connection.prepareStatement(UPDATE_ADVENTURE_QUERY))
+        {
+            setPrepStmParameters(updateAdvPrepStm, adventure);
+            updateAdvPrepStm.setInt(7,adventure.getId());
+            updateAdvPrepStm.executeUpdate();
+            return adventure;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //Deletes adventure from database, returns true if deleted, false if not
+    public Boolean delete(Integer adventureId){
+        try(Connection connection = DbUtil.getConnection()) {
+            PreparedStatement deleteAdvPrepStm = connection.prepareStatement(DELETE_ADVENTURE_QUERY);
+            deleteAdvPrepStm.setInt(1,adventureId);
+            deleteAdvPrepStm.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
     private Adventure generateAdvFromResultSet(ResultSet resultSet) throws SQLException {
