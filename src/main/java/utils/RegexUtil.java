@@ -16,7 +16,7 @@ public class RegexUtil {
     private static final Pattern VALID_COUNTRY_NAME =
             Pattern.compile("[a-zA-Z]{2,16}");
     private static final Pattern VALID_TITLE_ADDRESS_REGEX =
-            Pattern.compile("[a-zA-Z0-9]{4,128}");
+            Pattern.compile(".{4,128}");
 
 
     public static boolean validateEmail(String email) {

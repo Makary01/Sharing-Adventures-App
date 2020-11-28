@@ -16,8 +16,8 @@
 <form id="addForm" action="/app/add" method="post">
     <h1>Add adventure</h1>
     <input type="text" name="title" placeholder="title" required
-           pattern="[a-zA-Z0-9]{4,128}" title="4 to 128 letters and numbers">
-    <input type="text" name="content" placeholder="content" required>
+           pattern=".{4,128}" title="4 to 128 letters and numbers">
+    <textarea name="content" placeholder="content" required></textarea>
     Start date <input type="date" name="startDate" required>
     End date <input type="date" name="endDate" required>
     Type <select name="type" required><c:forEach items="${types}" var="type">
