@@ -21,6 +21,11 @@ public class Register extends HttpServlet {
         String city = request.getParameter("city");
         String country = request.getParameter("country");
 
+        if(!(username!=null&&email!=null&&password!=null
+                &&password2!=null&&city!=null&&country!=null)){
+            response.sendRedirect("/app/home");
+        }
+
         if (RegexUtil.validateUserName(username)
                 && RegexUtil.validatePassword(password)
                 && RegexUtil.validateEmail(email)

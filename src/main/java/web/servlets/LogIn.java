@@ -15,6 +15,9 @@ public class LogIn extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        if(!(username!=null&&password!=null)){
+            response.sendRedirect("/home");
+        }
 
         UserDao userDao = new UserDao();
         User verifiedUser = userDao.verify(username,password);

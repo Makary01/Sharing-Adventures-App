@@ -7,7 +7,6 @@ import utils.DbUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class AdventureDao {
 
@@ -16,8 +15,8 @@ public class AdventureDao {
 
     private static final String CREATE_ADVENTURE_QUERY = "INSERT INTO adventures" + ADVENTURE_PARAMETERS +" VALUES (?,?,?,?,?,?);";
     private static final String READ_ADVENTURE_QUERY = "SELECT * FROM adventures WHERE id = ? ;";
-    private static final String READ_USERS_ADVENTURES_QUERY = "SELECT * FORM adventures WHERE user_id = ?;";
-    private static final String UPDATE_ADVENTURE_QUERY = "UPDATE adventures SET" + ADVENTURE_PARAMETERS +" VALUES (?,?,?,?,?,?) WHERE id = ?;";
+    private static final String READ_USERS_ADVENTURES_QUERY = "SELECT * FROM adventures WHERE user_id = ?;";
+    private static final String UPDATE_ADVENTURE_QUERY = "UPDATE adventures SET user_id = ?,type = ?,title = ?,content = ?,start_date = ?,end_date = ?  WHERE id = ?;";
     private static final String DELETE_ADVENTURE_QUERY = "DELETE FROM adventures WHERE id = ?;";
 
 
@@ -62,11 +61,10 @@ public class AdventureDao {
 
     //Reads adventure from database by user's id, returns arraylist of adventures if found, or null if not
     public ArrayList<Adventure> readByUserId(Integer userId){
-        ArrayList<Adventure> adventuresToReturn = null;
+        ArrayList<Adventure> adventuresToReturn = new ArrayList<>();
         try(Connection connection = DbUtil.getConnection()){
             PreparedStatement readAdvsPrepStm = connection.prepareStatement(READ_USERS_ADVENTURES_QUERY);
             readAdvsPrepStm.setInt(1,userId);
-            readAdvsPrepStm.executeUpdate();
             ResultSet resultSet = readAdvsPrepStm.executeQuery();
             while (resultSet.next()){
                Adventure advToAdd = generateAdvFromResultSet(resultSet);

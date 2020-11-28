@@ -46,7 +46,7 @@ public class AddAdventure extends HttpServlet {
             //Successfully added
             response.sendRedirect("/app/home");
         }else {
-            //Wrong data
+            //Wrong Data
             response.sendRedirect("/app/home");
         }
     }

@@ -16,7 +16,7 @@ public class UserDao {
 
     private static final String CREATE_USER_QUERY = "INSERT INTO users" + USER_PARAMETERS + " VALUES (?,?,?,?,?);";
     private static final String READ_USER_QUERY = "SELECT * FROM users WHERE id = ? ;";
-    private static final String UPDATE_USER_QUERY = "UPDATE users SET" + USER_PARAMETERS + " VALUES (?,?,?,?,?);";
+    private static final String UPDATE_USER_QUERY = "UPDATE users SET username = ?,email = ?,password = ?,city = ?,country= ?  WHERE id = ?;";
     private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id = ?;";
     private static final String VERIFY_USER_QUERY = "SELECT * FROM users WHERE username = ?;";
 
@@ -68,6 +68,7 @@ public class UserDao {
         try (Connection connection = DbUtil.getConnection()) {
             PreparedStatement updateUserPrepStm = connection.prepareStatement(UPDATE_USER_QUERY);
             setPrepStmParameters(updateUserPrepStm, user);
+            updateUserPrepStm.setInt(6,user.getId());
             updateUserPrepStm.executeUpdate();
             userToReturn = user;
         } catch (SQLException e) {
