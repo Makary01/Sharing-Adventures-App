@@ -43,7 +43,7 @@
 
 <form id="loginForm" action="/login" method="post">
     <h1>login</h1>
-    <input type="text" name="username" placeholder="user name">
+    <input type="text" name="username" placeholder="user name" required>
     <input type="password" name="password" placeholder="password" required>
     <input type="submit" value="log in">
 </form>

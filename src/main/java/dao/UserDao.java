@@ -91,14 +91,11 @@ public class UserDao {
         try(Connection conn = DbUtil.getConnection();
             PreparedStatement verifyUserPrepStm = conn.prepareStatement(VERIFY_USER_QUERY)){
             verifyUserPrepStm.setString(1, username);
-            verifyUserPrepStm.setString(2, username);
             ResultSet resultSet = verifyUserPrepStm.executeQuery();
-            if(resultSet.next()){
                 User userToReturn = generateUserFromResultSet(resultSet);
                 if(BCrypt.checkpw(password,userToReturn.getPassword())){
                     return userToReturn;
                 }
-            }
         }catch (SQLException e){
             e.printStackTrace();
         }
