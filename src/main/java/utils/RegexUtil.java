@@ -15,6 +15,8 @@ public class RegexUtil {
             Pattern.compile("[a-zA-Z]{2,16}");
     private static final Pattern VALID_COUNTRY_NAME =
             Pattern.compile("[a-zA-Z]{2,16}");
+    private static final Pattern VALID_TITLE_ADDRESS_REGEX =
+            Pattern.compile("[a-zA-Z0-9]{4,128}");
 
 
     public static boolean validateEmail(String email) {
@@ -38,5 +40,10 @@ public class RegexUtil {
     public static boolean validateCountry(String country) {
         Matcher matcher = VALID_COUNTRY_NAME.matcher(country);
         return (matcher.matches());
+    }
+
+    public static boolean validateTitle(String title) {
+        Matcher matcher = VALID_TITLE_ADDRESS_REGEX.matcher(title);
+        return matcher.matches();
     }
 }

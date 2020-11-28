@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS adventures
 (
     id       INT UNIQUE AUTO_INCREMENT NOT NULL,
-    user_id INT UNIQUE NOT NULL REFERENCES users(id),
+    user_id INT NOT NULL REFERENCES users(id),
     type VARCHAR(255) NOT NULL ,
     title VARCHAR(255) NOT NULL ,
     content TEXT ,

@@ -5,10 +5,7 @@ import model.Adventure;
 import utils.DateUtil;
 import utils.DbUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -128,9 +125,8 @@ public class AdventureDao {
         prepStm.setString(2, adventure.getType());
         prepStm.setString(3, adventure.getTitle());
         prepStm.setString(4, adventure.getContent());
-        prepStm.setString(5, DateUtil.dateToString(adventure.getStartDate()));
-        prepStm.setString(5, DateUtil.dateToString(adventure.getStartDate()));
-        prepStm.setString(6, DateUtil.dateToString(adventure.getEndDate()));
+        prepStm.setDate(5, Date.valueOf(adventure.getStartDate()));
+        prepStm.setDate(6, Date.valueOf(adventure.getEndDate()));
     }
 
 }
