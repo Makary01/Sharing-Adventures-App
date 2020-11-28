@@ -55,7 +55,6 @@ public class AdventureDao {
         try(Connection connection = DbUtil.getConnection()){
             PreparedStatement readAdvPrepStm = connection.prepareStatement(READ_ADVENTURE_QUERY);
             readAdvPrepStm.setInt(1,adventureId);
-            readAdvPrepStm.executeUpdate();
             ResultSet resultSet = readAdvPrepStm.executeQuery();
             if(resultSet.next()) advToReturn = generateAdvFromResultSet(resultSet);
         } catch (SQLException e) {

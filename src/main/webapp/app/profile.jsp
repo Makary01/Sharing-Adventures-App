@@ -6,13 +6,16 @@
 </head>
 <body>
 <c:choose>
+
     <c:when test="${user.id != userId}">
         czyjś profil
     </c:when>
+
+
     <c:otherwise>
         twój profil
     </c:otherwise>
-</c:choose>
 
+</c:choose>
 </body>
 </html>
