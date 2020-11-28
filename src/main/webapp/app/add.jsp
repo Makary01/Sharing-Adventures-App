@@ -13,6 +13,9 @@
     </style>
 </head>
 <body>
+
+<a href="/app/home">Back to home page</a>
+
 <form id="addForm" action="/app/add" method="post">
     <h1>Add adventure</h1>
     <input type="text" name="title" placeholder="title" required

@@ -41,7 +41,8 @@ public class Home extends HttpServlet {
         }
         request.setAttribute("adventures", adventures);
         request.setAttribute("page",pageInt);
-        request.setAttribute("types", AdventureTypesUtil.getTypes());
+        ArrayList<String> types =  AdventureTypesUtil.getTypes();
+
         getServletContext().getRequestDispatcher("/app/home.jsp").forward(request,response);
     }
 }

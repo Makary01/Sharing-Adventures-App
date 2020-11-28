@@ -13,36 +13,50 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @WebServlet("/app/adventure")
 public class AdventureDetails extends HttpServlet {
 
     Integer requestedAdventureId = null;
+    AdventureDao adventureDao = new AdventureDao();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String title = request.getParameter("title");
-        String content = request.getParameter("content");
-        LocalDate startDate = DateUtil.stringToDate(request.getParameter("startDate"));
-        LocalDate endDate = DateUtil.stringToDate(request.getParameter("endDate"));
-        String type = request.getParameter("type");
-        Boolean isDateCorrect = DateUtil.isEarlierOrSame(startDate,endDate);
-
-        if(RegexUtil.validateTitle(title)
-                && AdventureTypesUtil.verifyType(type)
-                && isDateCorrect){
-            Adventure adventure = new Adventure(requestedAdventureId,
-                    (Integer) request.getSession().getAttribute("userId"),
-                    type,title,content,startDate,endDate
-            );
-            AdventureDao adventureDao = new AdventureDao();
-            adventureDao.update(adventure);
-
-            //Successfully updated
-            response.sendRedirect("/app/home");
+        if(request.getParameter("delete")!=null){
+            if(adventureDao.delete(requestedAdventureId)){
+                //successfully Deleted
+                response.sendRedirect("/app/home");
+            } else {
+                // not deleted
+                response.sendRedirect("/app/home");
+            }
         }else {
-            //Wrong data
-            response.sendRedirect("/app/home");
+
+
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+            LocalDate startDate = DateUtil.stringToDate(request.getParameter("startDate"));
+            LocalDate endDate = DateUtil.stringToDate(request.getParameter("endDate"));
+            String type = request.getParameter("type");
+            Boolean isDateCorrect = DateUtil.isEarlierOrSame(startDate, endDate);
+
+            if (RegexUtil.validateTitle(title)
+                    && AdventureTypesUtil.verifyType(type)
+                    && isDateCorrect) {
+                Adventure adventure = new Adventure(requestedAdventureId,
+                        (Integer) request.getSession().getAttribute("userId"),
+                        type, title, content, startDate, endDate
+                );
+
+                adventureDao.update(adventure);
+
+                //Successfully updated
+                response.sendRedirect("/app/home");
+            } else {
+                //Wrong data
+                response.sendRedirect("/app/home");
+            }
         }
 
     }
@@ -59,6 +73,9 @@ public class AdventureDetails extends HttpServlet {
             AdventureDao adventureDao = new AdventureDao();
             Adventure requestedAdventure = adventureDao.read(requestedAdventureId);
             if(requestedAdventure!=null){
+                ArrayList<String> adventureTypes = AdventureTypesUtil.getTypes();
+                adventureTypes.remove(requestedAdventure.getType());
+                request.setAttribute("types", adventureTypes);
                 request.setAttribute("adventure",requestedAdventure);
                 getServletContext().getRequestDispatcher("/app/adventure.jsp")
                         .forward(request,response);

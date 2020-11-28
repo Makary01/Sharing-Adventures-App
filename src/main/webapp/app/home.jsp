@@ -7,10 +7,12 @@
 </head>
 <body>
 <a href="/app/profile?id=${userId}">Twój profil</a><br>
-Najnowsze przygody:
+<a href="/app/add">Add adventure</a><br>
+
+Latest adventures:
 <ul>
 <c:forEach items="${adventures}" var="adventure">
-    <li><a href="/app/adventure?id=${adventure.id}">${adventure.title}</a></li>
+    <li><a href="/app/adventure?id=${adventure.id}">${adventure.title}</a>|${adventure.type}</li>
 </c:forEach><br>
     <a href="/app/home?page=${page-1}">prev page</a>|<a href="/app/home?page=${page+1}">next page</a>
 </ul>
