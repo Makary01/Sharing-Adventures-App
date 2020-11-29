@@ -5,6 +5,7 @@ import model.Adventure;
 import utils.AdventureTypesUtil;
 import utils.DateUtil;
 import utils.RegexUtil;
+import utils.WebUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,10 +27,10 @@ public class AdventureDetails extends HttpServlet {
         if(request.getParameter("delete")!=null){
             if(adventureDao.delete(requestedAdventureId)){
                 //successfully Deleted
-                response.sendRedirect("/app/home");
+                WebUtil.redirectHome(request,response,"successfully deleted",false);
             } else {
                 // not deleted
-                response.sendRedirect("/app/home");
+                WebUtil.redirectHome(request,response,"Error, adventure not deleted",true);
             }
         }else {
 
@@ -40,10 +41,16 @@ public class AdventureDetails extends HttpServlet {
             LocalDate endDate = DateUtil.stringToDate(request.getParameter("endDate"));
             String type = request.getParameter("type");
             Boolean isDateCorrect = DateUtil.isEarlierOrSame(startDate, endDate);
+            Boolean notNull = (title !=null && content !=null && startDate!=null && endDate!=null&&
+            type!=null) ? true : false;
+
+
+
 
             if (RegexUtil.validateTitle(title)
                     && AdventureTypesUtil.verifyType(type)
-                    && isDateCorrect) {
+                    && isDateCorrect
+            &&notNull) {
                 Adventure adventure = new Adventure(requestedAdventureId,
                         (Integer) request.getSession().getAttribute("userId"),
                         type, title, content, startDate, endDate
@@ -52,10 +59,10 @@ public class AdventureDetails extends HttpServlet {
                 adventureDao.update(adventure);
 
                 //Successfully updated
-                response.sendRedirect("/app/home");
+                WebUtil.redirectHome(request,response,"Successfully updated adventure",false);
             } else {
                 //Wrong data
-                response.sendRedirect("/app/home");
+                WebUtil.redirectHome(request,response,"Error adventure not updated",false);
             }
         }
 
@@ -81,11 +88,11 @@ public class AdventureDetails extends HttpServlet {
                         .forward(request,response);
             }else {
                 //no such adventure
-                response.sendRedirect("/app/home");
+                WebUtil.redirectHome(request,response,"There is no such adventure",true);
             }
         }else {
             //NaN
-            response.sendRedirect("/app/home");
+            WebUtil.redirectHome(request,response,"There is no such adventure",true);
         }
     }
 }

@@ -6,7 +6,11 @@
     <title>User's home page title</title>
 </head>
 <body>
-<a href="/app/profile?id=${userId}">Twój profil</a><br>
+
+<h1 id="errorMsg" style="color: ${color}">${msg}</h1><br>
+
+
+<a href="/app/profile?id=${userId}">Your profile</a><br>
 <a href="/app/add">Add adventure</a><br>
 
 Latest adventures:

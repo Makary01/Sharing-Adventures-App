@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -41,8 +42,19 @@ public class Home extends HttpServlet {
         }
         request.setAttribute("adventures", adventures);
         request.setAttribute("page",pageInt);
-        ArrayList<String> types =  AdventureTypesUtil.getTypes();
+
+        HttpSession session = request.getSession();
+        Boolean shouldDisplay = (Boolean) session.getAttribute("shouldDisplay");
+        if(shouldDisplay!=null){
+            if(shouldDisplay==false){
+                session.setAttribute("msg",null);
+                session.setAttribute("color",null);
+            }else {
+                session.setAttribute("shouldDisplay",false);
+            }
+        }
 
         getServletContext().getRequestDispatcher("/app/home.jsp").forward(request,response);
+
     }
 }

@@ -4,6 +4,7 @@ import dao.AdventureDao;
 import dao.UserDao;
 import model.User;
 import utils.RegexUtil;
+import utils.WebUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,7 +31,7 @@ public class Profile extends HttpServlet {
 
         if(!(username!=null&&email!=null&&oldPassword!=null&&password!=null
                 &&password2!=null&&city!=null&&country!=null)){
-            response.sendRedirect("/app/home");
+            WebUtil.redirectHome(request,response,"Wrong data, user not edited",true);
         }
 
         userToEdit = userDao.verify(userToEdit.getUsername(),oldPassword);
@@ -53,18 +54,18 @@ public class Profile extends HttpServlet {
 
                 if (editedUser != null) {
                     request.getSession().setAttribute("userId", editedUser.getId());
-                    response.sendRedirect("/app/home");
+                    WebUtil.redirectHome(request,response,"Edited successfully",false);
                 } else {
                     //Error while creating
-                    response.sendRedirect("/app/home");
+                    WebUtil.redirectHome(request,response,"Error, user not eddited",true);
                 }
             } else {
                 //Wrong data
-                response.sendRedirect("/app/home");
+                WebUtil.redirectHome(request,response,"Wrong data, user not edited",true);
             }
         }else {
             //wrong password
-            response.sendRedirect("/app/home");
+            WebUtil.redirectHome(request,response,"Wrong password",true);
         }
 
 
@@ -77,7 +78,7 @@ public class Profile extends HttpServlet {
             String id = request.getParameter("id").trim();
             requestedUserId = Integer.parseInt(id);
         } catch (NumberFormatException e) {
-            response.sendRedirect("/app/home");
+            WebUtil.redirectHome(request,response,"There is no such profile",true);
             e.printStackTrace();
         }
         if(requestedUserId!=null){
@@ -92,11 +93,11 @@ public class Profile extends HttpServlet {
                         .forward(request,response);
             }else {
                 //no such profile
-                response.sendRedirect("/app/home");
+                WebUtil.redirectHome(request,response,"There is no such profile",true);
             }
         }else {
             //NaN
-            response.sendRedirect("/app/home");
+            WebUtil.redirectHome(request,response,"There is no such profile",true);
         }
     }
 }
