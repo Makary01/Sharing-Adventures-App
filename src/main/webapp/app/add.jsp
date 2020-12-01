@@ -3,14 +3,7 @@
 <html>
 <head>
     <title>Add adventure title</title>
-    <style>
-        form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
 
@@ -18,15 +11,15 @@
 
 <form id="addForm" action="/app/add" method="post">
     <h1>Add adventure</h1>
-    <input type="text" name="title" placeholder="title" required
-           pattern=".{4,128}" title="4 to 128 letters and numbers">
-    <textarea name="content" placeholder="content" required></textarea>
-    Start date <input type="date" name="startDate" required>
-    End date <input type="date" name="endDate" required>
-    Type <select name="type" required><c:forEach items="${types}" var="type">
+    Title:<input type="text" name="title" value="${adventure.title}" required
+                 pattern=".{4,128}" title="4 to 128 letters and numbers"><br>
+    Content:<textarea name="content" required rows="12" cols="50">${adventure.content}</textarea><br>
+    Start date: <input type="date" name="startDate" required value="${adventure.startDate}"><br>
+    End date: <input type="date" name="endDate" required value="${adventure.endDate}"><br>
+    Type: <select name="type" required><c:forEach items="${types}" var="type">
         <option>${type}</option>
     </c:forEach></select>
-    <input type="submit" value="add adventure">
+    <input type="submit" value="add adventure" style="cursor: pointer;">
 </form>
 </body>
 </html>

@@ -3,19 +3,12 @@
 <html>
 <head>
     <title>User's profile</title>
-    <style>
-        form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
 
-<a href="/app/home">Back to home page</a>
-
+<a href="/app/home">Back to home page</a><br>
+<div id="container">
 <c:choose>
     <c:when test="${user.id != userId}">
         User nr${user.id}<br>
@@ -43,9 +36,9 @@
             Country: <input type="text" name="country" value="${user.country}" required><br>
             City: <input type="text" name="city" value="${user.city}" required><br>
             Old password: <input type="password" name="oldPassword" required placeholder="old password" required><br>
-            Password: <input type="password" name="password" placeholder="new password" required><br>
+            New Password: <input type="password" name="password" placeholder="new password" required><br>
             Confirm password: <input type="password" name="password2" placeholder="confirm password" required><br>
-            <input type="submit" value="Save changes"><br><br>
+            <input type="submit" value="Save changes" style="cursor: pointer;"><br><br>
         </form>
         Your adventures:
         <ul>
@@ -56,5 +49,6 @@
     </c:otherwise>
 
 </c:choose>
+</div>
 </body>
 </html>
